@@ -53,14 +53,27 @@ nor p q = not $ p && q
 Boolean arguments, and test it with all possible True/False input
 combinations.
 -}
+one :: (Bool -> Bool) -> [Bool]
 one f = map f [False,True]
 
+two :: (Bool -> Bool -> Bool) -> [Bool]
 two f = map (uncurry f) [(False,False),(False,True),(True,False),(True,True)]
 
+three :: (Bool -> Bool -> Bool -> Bool) -> [Bool]
 three f = map (uncurry3 f) [ (False,False,False), (False,False,True)
                            , (False,True,False),  (False,True,True)
                            , (True,False,False),  (True,False,True)
                            , (True,True,False),   (True,True,True) ]
+
+four :: (Bool -> Bool -> Bool -> Bool -> Bool) -> [Bool]
+four f = map (uncurry4 f) [ (False,False,False,False), (False,False,False,True)
+                          , (False,False,True,False), (False,False,True,True)
+                          , (False,True,False,False), (False,True,False,True)
+                          , (False,True,True,False),  (False,True,True,True)
+                          , (True,False,False,False), (True,False,False,True)
+                          , (True,False,True,False),  (True,False,True,True)
+                          , (True,True,False,False),  (True,True,False,True)
+                          , (True,True,True,False),   (True,True,True,True) ]
 
 ------------------
 -- TAUTOLOGY TESTS
@@ -92,5 +105,9 @@ demorgan2 p q = not (p || q) == (not p && not q)
 -----------
 -- PLUMBING
 -----------
+-- Can this be done better with lenes?
 uncurry3 :: (a -> b -> c -> d) -> (a,b,c) -> d
 uncurry3 f (a,b,c) = f a b c
+
+uncurry4 :: (a -> b -> c -> d -> e) -> (a,b,c,d) -> e
+uncurry4 f (a,b,c,d) = f a b c d
